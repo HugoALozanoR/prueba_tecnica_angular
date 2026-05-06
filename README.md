@@ -2,6 +2,8 @@
 
 Sistema de reservas de turnos para un gimnasio, desarrollado con Angular 21.
 
+**Demo en vivo:** https://gym-reservas-p2piieq84-hugoalozanors-projects.vercel.app/
+
 ## Instalación y ejecución
 
 ```bash

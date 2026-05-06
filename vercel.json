@@ -1,0 +1,4 @@
+{
+  "outputDirectory": "dist/gym-reservas/browser",
+  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+}

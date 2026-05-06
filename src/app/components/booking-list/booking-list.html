@@ -1,0 +1,38 @@
+<section class="booking-list">
+  <h1 class="booking-list__title">🏋️ Reservas disponibles</h1>
+
+  @if (isLoading()) {
+    <div class="booking-list__state">
+      <p class="booking-list__state-text">Cargando clases...</p>
+    </div>
+  } @else if (hasError()) {
+    <div class="booking-list__state booking-list__state--error">
+      <p class="booking-list__state-text">Error al cargar las clases. Intentá de nuevo.</p>
+    </div>
+  } @else if (bookings().length === 0) {
+    <div class="booking-list__state">
+      <p class="booking-list__state-text">No hay clases disponibles en este momento.</p>
+    </div>
+  } @else {
+    <ul class="booking-list__cards">
+      @for (booking of bookings(); track booking.id) {
+        <li
+          class="booking-card"
+          [class.booking-card--active]="selectedBooking()?.id === booking.id"
+        >
+          <div class="booking-card__info">
+            <h2 class="booking-card__name">{{ booking.className }}</h2>
+            <p class="booking-card__instructor">{{ booking.instructor }}</p>
+            <p class="booking-card__schedule">{{ booking.schedule }}</p>
+            @if (booking.availableSpots === 0) {
+              <span class="booking-card__spots booking-card__spots--full">Sin cupos</span>
+            } @else {
+              <span class="booking-card__spots">{{ booking.availableSpots }} cupos disponibles</span>
+            }
+          </div>
+          <button class="booking-card__btn" (click)="onSelect(booking)">Ver más</button>
+        </li>
+      }
+    </ul>
+  }
+</section>

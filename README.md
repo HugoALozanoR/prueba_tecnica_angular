@@ -1,59 +1,53 @@
 # GymReservas
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.8.
+Sistema de reservas de turnos para un gimnasio, desarrollado con Angular 21.
 
-## Development server
-
-To start a local development server, run:
+## Instalación y ejecución
 
 ```bash
+npm install
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Abrir en el navegador: `http://localhost:4200`
 
-## Code scaffolding
+## Versiones utilizadas
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+- Node.js: 22.22.2
+- Angular CLI: 21.2.10
+- Angular: 21.2.0
 
-```bash
-ng generate component component-name
+## Arquitectura de componentes
+
+```
+AppComponent
+├── BookingListComponent   → listado de tarjetas de clases
+└── BookingDetailComponent → detalle de la clase seleccionada
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+| Componente | Responsabilidad |
+|---|---|
+| `AppComponent` | Shell principal: header, layout y footer |
+| `BookingListComponent` | Listado de reservas con estados loading, error y empty |
+| `BookingDetailComponent` | Detalle de la clase seleccionada y acción de reserva |
 
-```bash
-ng generate --help
-```
+## Estrategia de comunicación
 
-## Building
+Se eligió un **servicio compartido con `BehaviorSubject`** en lugar de `@Input()` / `@Output()`.
 
-To build the project run:
+**Motivo:** `BookingListComponent` y `BookingDetailComponent` son hermanos en el árbol de componentes (ambos hijos de `AppComponent`), por lo que la comunicación directa padre-hijo no aplica de forma natural. El servicio centraliza el estado de la selección y ambos componentes lo consumen de forma independiente, sin acoplamiento entre ellos.
 
-```bash
-ng build
-```
+Adicionalmente, se utiliza `toSignal()` de `@angular/core/rxjs-interop` para exponer el `BehaviorSubject` como un **Signal**, aprovechando la reactividad moderna de Angular.
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## Simulación de la API
 
-## Running unit tests
+Se implementó un **HTTP Interceptor funcional** (`bookingsMockInterceptor`) que intercepta la llamada `GET /api/bookings` y retorna datos mockeados con un delay de 800ms para simular latencia de red.
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+Esto permite que el `BookingService` consuma `HttpClient` de forma real, sin modificar su implementación para tests o mocks.
 
-```bash
-ng test
-```
+## Puntos extra implementados
 
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- **Standalone components** — todos los componentes son standalone.
+- **Control flow syntax** — uso de `@if`, `@else if` y `@for` en los templates.
+- **Signals** — estado reactivo con `signal()` en los componentes y `toSignal()` en el servicio.
+- **Animaciones suaves** — transición `slideIn` al abrir el panel de detalle.

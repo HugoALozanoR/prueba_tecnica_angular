@@ -1,0 +1,36 @@
+@if (booking(); as b) {
+  <article class="booking-detail">
+    <button class="booking-detail__close" (click)="onClose()">✕</button>
+
+    <h2 class="booking-detail__title">{{ b.className }}</h2>
+
+    <dl class="booking-detail__info">
+      <dt>Profesor</dt>
+      <dd>{{ b.instructor }}</dd>
+
+      <dt>Horario</dt>
+      <dd>{{ b.schedule }}</dd>
+
+      <dt>Cupos</dt>
+      <dd>
+        @if (b.availableSpots === 0) {
+          <span class="booking-detail__spots--full">Sin cupos disponibles</span>
+        } @else {
+          {{ b.availableSpots }} disponibles
+        }
+      </dd>
+    </dl>
+
+    @if (reserved()) {
+      <p class="booking-detail__success">✅ ¡Reserva confirmada!</p>
+    } @else {
+      <button
+        class="booking-detail__btn"
+        [disabled]="b.availableSpots === 0"
+        (click)="onReserve()"
+      >
+        Reservar
+      </button>
+    }
+  </article>
+}

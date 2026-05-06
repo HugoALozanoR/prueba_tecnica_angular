@@ -34,7 +34,7 @@ const MOCK_BOOKINGS: Booking[] = [
   {
     id: 5,
     className: 'Zumba',
-    instructor: 'Rodrigo Chapa',
+    instructor: 'Ricardo Chapa',
     schedule: 'Viernes 20:00',
     availableSpots: 3,
   },

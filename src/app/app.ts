@@ -1,12 +1,15 @@
-import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, inject } from '@angular/core';
+import { BookingList } from './components/booking-list/booking-list';
+import { BookingDetail } from './components/booking-detail/booking-detail';
+import { BookingService } from './services/booking';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [BookingList, BookingDetail],
   templateUrl: './app.html',
-  styleUrl: './app.scss'
+  styleUrl: './app.scss',
 })
 export class App {
-  protected readonly title = signal('gym-reservas');
+  private bookingService = inject(BookingService);
+  readonly selectedBooking = this.bookingService.selectedBooking;
 }
